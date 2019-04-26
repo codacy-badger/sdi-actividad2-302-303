@@ -30,6 +30,18 @@ module.exports = function(app, swig, gestorBD) {
     });
     app.get('/productos/agregar', function (req, res) {
         var respuesta = swig.renderFile('views/bagregar.html', { });
-        res.send(respuesta); })
+        res.send(respuesta); });
+
+    app.get("/tienda", function(req, res) { gestorBD.obtenerCanciones( function(canciones) {
+        if (canciones == null) {
+            res.send("Error al listar ");
+        } else {
+            var respuesta = swig.renderFile('views/btienda.html',
+                { canciones : canciones
+                });
+            res.send(respuesta);
+        }
+    });
+    });
 
 };
