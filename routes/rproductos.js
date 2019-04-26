@@ -8,11 +8,20 @@ module.exports = function(app, swig, gestorBD) {
         res.send(respuesta);
     });
 
-    app.get('/producto/:id', function(req, res) {
-        var respuesta = 'id: ' + req.params.id;
-        res.send(respuesta);
-    });
-
+    app.get('/producto/:id', function (req, res) {
+        var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
+        gestorBD.obtenerProductos(criterio,function(productos){
+            if ( productos == null ){
+                res.send(respuesta);
+            } else {
+                var respuesta = swig.renderFile('views/bproducto.html',
+                    {
+                        producto : productos[0]
+                    });
+                res.send(respuesta);
+            }
+        });
+    })
     app.post("/producto", function(req, res) {
         var producto = {
             nombre : req.body.nombre,
@@ -33,14 +42,21 @@ module.exports = function(app, swig, gestorBD) {
         res.send(respuesta); });
 
     app.get("/tienda", function(req, res) { gestorBD.obtenerCanciones( function(canciones) {
-        if (canciones == null) {
-            res.send("Error al listar ");
-        } else {
-            var respuesta = swig.renderFile('views/btienda.html',
-                { canciones : canciones
-                });
-            res.send(respuesta);
+        var criterio = {};
+        if( req.query.busqueda != null ){
+            criterio = {"nombre" : {$regex : ".*"+req.query.busqueda+".*"} };
         }
+        gestorBD.obtenerCanciones(criterio, function(canciones) {
+            if (canciones == null) {
+                res.send("Error al listar ");
+            } else {
+                var respuesta = swig.renderFile('views/btienda.html',
+                    {
+                        canciones : canciones
+                    });
+                res.send(respuesta);
+            }
+        });
     });
     });
 

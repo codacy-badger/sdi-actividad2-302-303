@@ -5,17 +5,16 @@ module.exports = {
         this.mongo = mongo;
         this.app = app;
     },
-    obtenerCanciones: function (funcionCallback) {
-        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+    obtenerProductos: function(criterio,funcionCallback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
                 funcionCallback(null);
             } else {
-                var collection = db.collection('canciones');
-                collection.find().toArray(function (err, canciones) {
+                var collection = db.collection('productos'); collection.find(criterio).toArray(function(err, productos) {
                     if (err) {
                         funcionCallback(null);
                     } else {
-                        funcionCallback(canciones);
+                        funcionCallback(productos);
                     }
                     db.close();
                 });
