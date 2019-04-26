@@ -51,23 +51,37 @@ module.exports = function(app, swig, gestorBD) {
         res.send(respuesta);
         });
 
-    app.get("/tienda", function(req, res) { gestorBD.obtenerCanciones( function(canciones) {
+    app.get("/tienda", function(req, res) { gestorBD.obtenerProductos( function(productos) {
         var criterio = {};
         if( req.query.busqueda != null ){
             criterio = {"nombre" : {$regex : ".*"+req.query.busqueda+".*"} };
         }
-        gestorBD.obtenerCanciones(criterio, function(canciones) {
-            if (canciones == null) {
+        gestorBD.obtenerProductos(criterio, function(productos) {
+            if (productos == null) {
                 res.send("Error al listar ");
             } else {
                 var respuesta = swig.renderFile('views/btienda.html',
                     {
-                        canciones : canciones
+                        productos : productos
                     });
                 res.send(respuesta);
             }
         });
     });
+    });
+    app.get("/publicaciones", function(req, res) {
+        var criterio = { autor : req.session.usuario };
+        gestorBD.obtenerProductos(criterio, function(productos) {
+            if (productos == null) {
+                res.send("Error al listar ");
+            } else {
+                var respuesta = swig.renderFile('views/btienda.html',
+                    {
+                        productos : productos
+                    });
+                res.send(respuesta);
+            }
+        });
     });
 
 };
