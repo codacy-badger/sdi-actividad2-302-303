@@ -84,6 +84,7 @@ module.exports = function(app, swig, gestorBD) {
         });
     });
 
+    //TODO PAGINA 34/38 PRACTICA 2. COMPROBAR QUE LA CANCION ES TUYA. NO SE CONTINUÓ A PARTIR DE ESA PAGINA
     app.get('/producto/modificar/:id', function (req, res) {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerProductos(criterio,function(productos){
