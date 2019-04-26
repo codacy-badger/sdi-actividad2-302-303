@@ -3,6 +3,7 @@
   "Description": "Compra y vende en myWallapop",
   "version": "1.0.0",
   "dependencies": {
-    "express": "4.16.4"
+    "express": "4.16.4",
+    "mongodb": "^2.2.33"
   }
 }
