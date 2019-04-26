@@ -1,0 +1,8 @@
+{
+  "name": "myWallapop",
+  "Description": "Compra y vende en myWallapop",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "4.16.4"
+  }
+}
