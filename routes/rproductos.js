@@ -23,10 +23,15 @@ module.exports = function(app, swig, gestorBD) {
         });
     })
     app.post("/producto", function(req, res) {
+        if ( req.session.usuario == null){
+            res.redirect("/tienda");
+            return;
+        }
         var producto = {
             nombre : req.body.nombre,
             descripcion : req.body.descripcion,
             precio : req.body.precio
+            vendedor: req.session.usuario
         }
         // Conectarse
         gestorBD.insertarProducto(producto, function(id){
@@ -38,8 +43,13 @@ module.exports = function(app, swig, gestorBD) {
         });
     });
     app.get('/productos/agregar', function (req, res) {
+        if ( req.session.usuario == null) {
+            res.redirect("/tienda");
+            return;
+        }
         var respuesta = swig.renderFile('views/bagregar.html', { });
-        res.send(respuesta); });
+        res.send(respuesta);
+        });
 
     app.get("/tienda", function(req, res) { gestorBD.obtenerCanciones( function(canciones) {
         var criterio = {};

@@ -3,6 +3,9 @@ var express = require('express');
 var app = express();
 var swig = require('swig');
 var mongo = require('mongodb');
+var crypto = require('crypto');
+var expressSession = require('express-session');
+app.use(expressSession({ secret: 'abcdefg', resave: true, saveUninitialized: true }));
 
 
 var gestorBD = require("./modules/gestorBD.js");
@@ -17,6 +20,7 @@ app.set('port', 8081);
 app.set('db','mongodb://admin:admin@mywallapop-shard-00-00-crogy.mongodb.net:27017,' +
     'mywallapop-shard-00-01-crogy.mongodb.net:27017,' +
     'mywallapop-shard-00-02-crogy.mongodb.net:27017/test?ssl=true&replicaSet=myWallapop-shard-0&authSource=admin&retryWrites=true');
+app.set('clave','abcdefg'); app.set('crypto',crypto);
 
 //Rutas/controladores por lógica
 require("./routes/rusuarios.js")(app,swig, gestorBD); // (app, param1, param2, etc.)
