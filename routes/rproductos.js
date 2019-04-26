@@ -84,4 +84,19 @@ module.exports = function(app, swig, gestorBD) {
         });
     });
 
+    app.get('/producto/modificar/:id', function (req, res) {
+        var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
+        gestorBD.obtenerProductos(criterio,function(productos){
+            if ( productos == null ){
+                res.send(respuesta);
+            } else {
+                var respuesta = swig.renderFile('views/bproductoModificar.html',
+                    {
+                        producto : productos[0]
+                    });
+                res.send(respuesta);
+            }
+        });
+    })
+
 };

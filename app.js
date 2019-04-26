@@ -35,7 +35,7 @@ routerUsuarioSession.use(function(req, res, next) {
         console.log("va a : "+req.session.destino) res.redirect("/identificarse"); } });
     }
 //Aplicar routerUsuarioSession
-app.use("/canciones/agregar",routerUsuarioSession);
+app.use("/productos/agregar",routerUsuarioSession);
 app.use("/publicaciones",routerUsuarioSession);
 app.use("/audios/",routerUsuarioSession);
 
