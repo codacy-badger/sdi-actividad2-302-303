@@ -42,31 +42,37 @@ routerUsuarioSession.use(function(req, res, next) {
 //Aplicar routerUsuarioSession
 app.use("/productos/agregar",routerUsuarioSession);
 app.use("/publicaciones",routerUsuarioSession);
-app.use("/audios/",routerUsuarioSession);
+app.use("/producto/comprar",routerUsuarioSession);
+app.use("/compras",routerUsuarioSession);
 
 app.use(express.static('public'));
 
 
-//routerUsuarioAutor
-var routerUsuarioAutor = express.Router();
-routerUsuarioAutor.use(function(req, res, next) {
-    console.log("routerUsuarioAutor");
+//routerUsuarioVendedor
+var routerUsuarioVendedor = express.Router();
+routerUsuarioVendedor.use(function(req, res, next) {
+    console.log("routerUsuarioVendedor");
     var path = require('path');
     var id = path.basename(req.originalUrl); // Cuidado porque req.params no funciona
 // en el router si los params van en la URL.
     gestorBD.obtenerProductos(
         {_id: mongo.ObjectID(id) }, function (productos) {
             console.log(productos[0]);
-            if(productos[0].autor == req.session.usuario ){
+            if(productos[0].vendedor == req.session.usuario ){
                 next();
             } else {
             }
             res.redirect("/tienda");
         })
 });
-//Aplicar routerUsuarioAutor
-app.use("/producto/modificar",routerUsuarioAutor);
-app.use("/producto/eliminar",routerUsuarioAutor);
+//Aplicar routerUsuarioVendedor
+app.use("/producto/modificar",routerUsuarioVendedor);
+app.use("/producto/eliminar",routerUsuarioVendedor);
+
+
+app.get('/', function (req, res) {
+    res.redirect('/tienda');
+})
 
 
 

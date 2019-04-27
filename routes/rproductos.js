@@ -22,7 +22,7 @@ module.exports = function(app, swig, gestorBD) {
         // Conectarse
         gestorBD.insertarProducto(producto, function(id){
             if (id == null) {
-                res.send("Error al insertar canción");
+                res.send("Error al insertar producto");
             } else {
                 if (req.files.portada != null) {
                     var imagen = req.files.portada;
@@ -53,14 +53,24 @@ module.exports = function(app, swig, gestorBD) {
             criterio = {"nombre" : {$regex : ".*"+req.query.busqueda+".*"}
             };
         }
-        gestorBD.obtenerProductos(criterio, function(productos) {
+        var pg = parseInt(req.query.pg); // Es String !!!
+        if ( req.query.pg == null){ // Puede no venir el param
+            pg = 1;
+        }
+        gestorBD.obtenerProductosPg(criterio, pg , function(productos, total ) {
             if (productos == null) {
                 res.send("Error al listar ");
             } else {
-                var respuesta = swig.renderFile('views/btienda.html',
-                    {
-                        productos : productos
-                    });
+                var ultimaPg = total/4;
+                if (total % 4 > 0 ){ // Sobran decimales
+                     ultimaPg = ultimaPg+1;
+                } var paginas = []; // paginas mostrar
+                for(var i = pg-2 ; i <= pg+2 ; i++){
+                    if ( i > 0 && i <= ultimaPg){ paginas.push(i);
+                    }
+                } var respuesta = swig.renderFile('views/btienda.html', {
+                    productos : productos, paginas : paginas, actual : pg
+                });
                 res.send(respuesta);
             }
         });
@@ -135,6 +145,23 @@ module.exports = function(app, swig, gestorBD) {
                     res.redirect("/publicaciones");
                 }
             });
+        }),
+        app.get('/compras', function (req, res) {
+            var criterio = { "usuario" : req.session.usuario };
+            gestorBD.obtenerCompras(criterio ,function(compras){ if (compras == null) {
+                res.send("Error al listar "); } else {
+                var productosCompradasIds = [];
+                for(i=0; i < compras.length; i++){
+                    productosCompradasIds.push( compras[i].productoId );
+                }
+                var criterio = { "_id" : { $in: productosCompradasIds } }
+                gestorBD.obtenerProductos(criterio ,function(productos){
+                    var respuesta = swig.renderFile('views/bcompras.html', {
+                        productos: productos
+                    });
+                    res.send(respuesta);
+                });
+            }
+            });
         })
-
 };

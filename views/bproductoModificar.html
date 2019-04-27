@@ -1,9 +1,9 @@
 {% extends "base.html" %} 
 
-{% block titulo %} Agregar canción {% endblock %} 
+{% block titulo %} Agregar producto {% endblock %}
 
 {% block contenido_principal %}
-  <h2>Modificar canción</h2>
+  <h2>Modificar producto</h2>
   <form class="form-horizontal" method="post" action="/producto/modificar/{{ producto._id.toString() }}" encType="multipart/form-data">
     <div class="form-group">
       <label class="control-label col-sm-2" for="nombre">Nombre:</label>

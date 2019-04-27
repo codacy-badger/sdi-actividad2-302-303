@@ -12,7 +12,9 @@
 			  <h2>{{ producto.nombre }}</h2>
 			  <p>{{ producto.vendedor }}</p>
 			  <p>{{ producto.genero }}</p>
-			  <button type="button" class="btn btn-primary pull-right">{{ producto.precio }} €</button>
+			  <a class="btn btn-primary pull-right"
+				 href="/producto/comprar/{{producto._id.toString()}}">{{ producto.precio
+				  }} €</a>
 			 <!-- Cambiar el precio por "reproducir" si ya está comprada -->
 		  </div>
 		</div>
