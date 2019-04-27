@@ -5,6 +5,22 @@ module.exports = {
         this.mongo = mongo;
         this.app = app;
     },
+    modificarProducto : function(criterio, producto, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('productos');
+                collection.update(criterio, {$set: producto}, function(err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result);
+                    }
+                    db.close();
+                });
+            }
+        })},
     obtenerUsuarios : function(criterio,funcionCallback){
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
 
@@ -42,13 +58,13 @@ module.exports = {
             if (err) {
                 funcionCallback(null);
             } else {
-                var collection = db.collection('productos'); collection.find(criterio).toArray(function(err, productos) {
+                var collection = db.collection('productos');
+                collection.find(criterio).toArray(function(err, productos) {
                     if (err) {
                         funcionCallback(null);
                     } else {
                         funcionCallback(productos);
-                    }
-                    db.close();
+                    } db.close();
                 });
             }
         });
@@ -58,18 +74,16 @@ module.exports = {
             if (err) {
                 funcionCallback(null);
             } else {
-                if (req.files.portada != null) {
-                    var imagen = req.files.portada;
-                    imagen.mv('public/portadas/' + id
-                        + '.png', function (err) {
-                        if (err) {
-                            res.send("Error al subir la portada");
-                        } else {
-                            res.send("Agregada id: " + id);
-                        }
-                    });
-                }
+                var collection = db.collection('productos ');
+                collection.insert(producto, function(err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result.ops[0]._id);
+                    }
+                    db.close();
+                });
             }
-        })
+        });
     }
 };

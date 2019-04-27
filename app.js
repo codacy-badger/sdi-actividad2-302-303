@@ -7,11 +7,13 @@ var crypto = require('crypto');
 var expressSession = require('express-session');
 app.use(expressSession({ secret: 'abcdefg', resave: true, saveUninitialized: true }));
 var expressSession = require('express-session');
+var fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
-
+var bodyParser = require('body-parser');
 var gestorBD = require("./modules/gestorBD.js");
 gestorBD.init(app,mongo);
-var bodyParser = require('body-parser');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true }));
@@ -32,8 +34,11 @@ routerUsuarioSession.use(function(req, res, next) {
         // dejamos correr la petición
         next();
     } else {
-        console.log("va a : "+req.session.destino) res.redirect("/identificarse"); } });
+        console.log("va a : "+req.session.destino);
+        res.redirect("/identificarse");
     }
+});
+
 //Aplicar routerUsuarioSession
 app.use("/productos/agregar",routerUsuarioSession);
 app.use("/publicaciones",routerUsuarioSession);
