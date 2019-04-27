@@ -5,6 +5,21 @@ module.exports = {
         this.mongo = mongo;
         this.app = app;
     },
+    eliminarProducto : function(criterio, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) { funcionCallback(null);
+            } else {
+                var collection = db.collection('productos');
+                collection.remove(criterio, function(err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result);
+                    } db.close();
+                });
+            }
+        });
+        },
     modificarProducto : function(criterio, producto, funcionCallback) {
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
