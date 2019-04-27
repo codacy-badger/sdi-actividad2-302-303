@@ -39,7 +39,7 @@ module.exports = function(app, swig, gestorBD) {
         });
     });
     app.get('/productos/agregar', function (req, res) {
-        if ( req.session.usuario == null) {
+        if ( req.session.usuario == null || req.session.usuario == 'admin@admin.com') {
             res.redirect("/tienda");
             return;
         }

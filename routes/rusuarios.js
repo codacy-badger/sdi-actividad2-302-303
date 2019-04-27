@@ -13,6 +13,7 @@ module.exports = function(app, swig, gestorBD) {
             .update(req.body.password).digest('hex');
         var usuario = {
             email : req.body.email,
+            rol: 'estandar',
             password : seguro
         }
         gestorBD.insertarUsuario(usuario, function(id) {
