@@ -5,7 +5,7 @@
 
 <!-- Agregar Canción -->
 <div class="row text-right">
-	<a href="/productos/agregar" class="btn btn-info" role="button">Agregar canción</a>
+	<a href="/productos/agregar" class="btn btn-info" role="button">Agregar Producto</a>
 </div>
 
 <div class="table-responsive">
@@ -13,7 +13,7 @@
 		<thead>
 			<tr>
 				<th>Nombre</th>
-				<th>Genero</th>
+				<th>Descripcion</th>
 				<th class="col-md-1"></th>
 			</tr>
 		</thead>
@@ -21,8 +21,8 @@
 		{% for producto in productos %}
 			<tr>
 				<td>{{ producto.nombre }}</td>
-				<td>{{ producto.genero }}</td>
-				<td><a href="/producto/modificar/{{ producto._id.toString() }}"">Modificar</a> <br>
+				<td>{{ producto.descripcion }}</td>
+				<td><a href="/producto/modificar/{{ producto._id.toString() }}">Modificar</a> <br>
 					<a href="/producto/eliminar/{{ producto._id.toString() }}">Eliminar</a> <br>
 			    </td>
 			</tr>
@@ -33,7 +33,7 @@
 
 <!-- Agregar Canción -->
 <div class="row text-right">
-	<a href="/productos/agregar" class="btn btn-info" role="button">Agregar canción</a>
+	<a href="/productos/agregar" class="btn btn-info" role="button">Agregar producto</a>
 </div>
 
 {% endblock %}

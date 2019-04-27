@@ -47,10 +47,11 @@ module.exports = function(app, swig, gestorBD) {
         res.send(respuesta);
         });
 
-    app.get("/tienda", function(req, res) { gestorBD.obtenerProductos( function(productos) {
+    app.get("/tienda", function(req, res) {
         var criterio = {};
         if( req.query.busqueda != null ){
-            criterio = {"nombre" : {$regex : ".*"+req.query.busqueda+".*"} };
+            criterio = {"nombre" : {$regex : ".*"+req.query.busqueda+".*"}
+            };
         }
         gestorBD.obtenerProductos(criterio, function(productos) {
             if (productos == null) {
@@ -64,14 +65,13 @@ module.exports = function(app, swig, gestorBD) {
             }
         });
     });
-    });
     app.get("/publicaciones", function(req, res) {
-        var criterio = { autor : req.session.usuario };
+        var criterio = { vendedor : req.session.usuario };
         gestorBD.obtenerProductos(criterio, function(productos) {
             if (productos == null) {
                 res.send("Error al listar ");
             } else {
-                var respuesta = swig.renderFile('views/btienda.html',
+                var respuesta = swig.renderFile('views/bpublicaciones.html',
                     {
                         productos : productos
                     });

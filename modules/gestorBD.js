@@ -53,7 +53,7 @@ module.exports = {
             }
         });
     },
-    obtenerProductos: function(criterio,funcionCallback){
+    obtenerProductos:  function(criterio,funcionCallback){
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
                 funcionCallback(null);
@@ -64,7 +64,8 @@ module.exports = {
                         funcionCallback(null);
                     } else {
                         funcionCallback(productos);
-                    } db.close();
+                    }
+                    db.close();
                 });
             }
         });
@@ -74,7 +75,7 @@ module.exports = {
             if (err) {
                 funcionCallback(null);
             } else {
-                var collection = db.collection('productos ');
+                var collection = db.collection('productos');
                 collection.insert(producto, function(err, result) {
                     if (err) {
                         funcionCallback(null);
