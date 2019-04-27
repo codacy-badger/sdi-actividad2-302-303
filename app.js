@@ -46,6 +46,30 @@ app.use("/audios/",routerUsuarioSession);
 
 app.use(express.static('public'));
 
+
+//routerUsuarioAutor
+var routerUsuarioAutor = express.Router();
+routerUsuarioAutor.use(function(req, res, next) {
+    console.log("routerUsuarioAutor");
+    var path = require('path');
+    var id = path.basename(req.originalUrl); // Cuidado porque req.params no funciona
+// en el router si los params van en la URL.
+    gestorBD.obtenerProductos(
+        {_id: mongo.ObjectID(id) }, function (productos) {
+            console.log(productos[0]);
+            if(productos[0].autor == req.session.usuario ){
+                next();
+            } else {
+            }
+            res.redirect("/tienda");
+        })
+});
+//Aplicar routerUsuarioAutor
+app.use("/producto/modificar",routerUsuarioAutor);
+app.use("/producto/eliminar",routerUsuarioAutor);
+
+
+
 //Rutas/controladores por lógica
 require("./routes/rusuarios.js")(app,swig, gestorBD); // (app, param1, param2, etc.)
 require("./routes/rproductos.js")(app,swig, gestorBD); // (app, param1, param2, etc.)
