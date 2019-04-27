@@ -48,14 +48,14 @@ module.exports = {
                 var collection = db.collection('compras');
                 collection.insert(compra, function(err, result) {
                     if (err) {
+                        funcionCallback(null);
                     } else {
-                    }
-                    funcionCallback(null);
-                    funcionCallback(result.ops[0]._id);
+                        funcionCallback(result.ops[0]._id);
+                    } db.close();
                 });
             }
         });
-        db.close();
+
     },
     eliminarProducto : function(criterio, funcionCallback) {
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {

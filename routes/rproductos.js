@@ -163,5 +163,19 @@ module.exports = function(app, swig, gestorBD) {
                 });
             }
             });
-        })
+        }),
+        app.get('/producto/comprar/:id', function (req, res) {
+            var productoId = gestorBD.mongo.ObjectID(req.params.id);
+            var compra = {
+                usuario : req.session.usuario,
+                productoId : productoId
+            }
+            gestorBD.insertarCompra(compra ,function(idCompra){
+                if ( idCompra == null ){
+                    res.send(respuesta);
+                } else {
+                    res.redirect("/compras");
+                }
+            });
+        });
 };
