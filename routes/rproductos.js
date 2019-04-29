@@ -90,7 +90,6 @@ module.exports = function(app, swig, gestorBD) {
         });
     });
 
-    //TODO PAGINA 34/38 PRACTICA 2. COMPROBAR QUE LA CANCION ES TUYA. NO SE CONTINUÓ A PARTIR DE ESA PAGINA
     app.get('/producto/modificar/:id', function (req, res) {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerProductos(criterio,function(productos){
@@ -117,10 +116,28 @@ module.exports = function(app, swig, gestorBD) {
             if (result == null) {
                 res.send("Error al modificar ");
             } else {
-                res.send("Modificado "+result);
+                modificarPortada(req.files, id, function (result) {
+                    if( result == null){
+                        res.send("Error en la modificación");
+                    } else {
+                        res.send("Modificado");
+                    }
+                });
             }
         });
     });
+    function modificarPortada(files, id, callback){
+        if (files.portada != null) {
+            var imagen =files.portada;
+            imagen.mv('public/portadas/' + id + '.png', function(err) {
+                if (err) {
+                    callback(null); // ERROR
+                }
+            });
+        } else {
+            callback(true); // FIN
+        }
+    };
 
     app.get('/producto/:id', function (req, res) {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
