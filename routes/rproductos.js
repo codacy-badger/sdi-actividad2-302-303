@@ -1,4 +1,4 @@
-module.exports = function(app, swig, gestorBD) {
+module.exports = function(app, swig, gestorBD, mostrarVista) {
 
     app.get("/productos", function(req, res) {
         var respuesta = swig.renderFile('views/tienda.html', {
@@ -8,36 +8,6 @@ module.exports = function(app, swig, gestorBD) {
         res.send(respuesta);
     });
 
-    app.post("/producto", function(req, res) {
-        if ( req.session.usuario == null){
-            res.redirect("/tienda");
-            return;
-        }
-        var producto = {
-            nombre : req.body.nombre,
-            descripcion : req.body.descripcion,
-            precio : req.body.precio,
-            vendedor: req.session.usuario
-        }
-        // Conectarse
-        gestorBD.insertarProducto(producto, function(id){
-            if (id == null) {
-                res.send("Error al insertar producto");
-            } else {
-                if (req.files.portada != null) {
-                    var imagen = req.files.portada;
-                    imagen.mv('public/portadas/' +
-                        id + '.png', function(err) {
-                        if (err) {
-                            res.send("Error al subir la portada");
-                        } else {
-                            res.send("Agregada id: " + id);
-                        }
-                    });
-                }
-            }
-        });
-    });
     app.get('/productos/agregar', function (req, res) {
         if ( req.session.usuario == null || req.session.usuario == 'admin@admin.com') {
             res.redirect("/tienda");
@@ -81,10 +51,11 @@ module.exports = function(app, swig, gestorBD) {
             if (productos == null) {
                 res.send("Error al listar ");
             } else {
-                var respuesta = swig.renderFile('views/bpublicaciones.html',
-                    {
-                        productos : productos
-                    });
+                var respuesta =  mostrarVista.show('views/bpublicaciones.html', {
+                    "productos" : productos,
+                    "vendedor" : req.session.usuario,
+                    "balance" : req.session.balance
+                }, req.session, swig)
                 res.send(respuesta);
             }
         });
@@ -94,12 +65,13 @@ module.exports = function(app, swig, gestorBD) {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerProductos(criterio,function(productos){
             if ( productos == null ){
-                res.send(respuesta);
+                res.send("Error al modificar");
             } else {
                 var respuesta = swig.renderFile('views/bproductoModificar.html',
                     {
                         producto : productos[0]
-                    });
+                    }
+                    );
                 res.send(respuesta);
             }
         });
@@ -109,7 +81,7 @@ module.exports = function(app, swig, gestorBD) {
         var id = req.params.id; var criterio = { "_id" : gestorBD.mongo.ObjectID(id) };
         var producto = {
             nombre : req.body.nombre,
-            genero : req.body.genero,
+            descripcion : req.body.descripcion,
             precio : req.body.precio
         }
         gestorBD.modificarProducto(criterio, producto, function(result) {
@@ -195,4 +167,34 @@ module.exports = function(app, swig, gestorBD) {
                 }
             });
         });
+    app.post("/producto", function(req, res) {
+        if ( req.session.usuario == null){
+            res.redirect("/tienda");
+            return;
+        }
+        var producto = {
+            nombre : req.body.nombre,
+            descripcion : req.body.descripcion,
+            precio : req.body.precio,
+            vendedor: req.session.usuario
+        }
+        // Conectarse
+        gestorBD.insertarProducto(producto, function(id){
+            if (id == null) {
+                res.send("Error al insertar producto");
+            } else {
+                if (req.files.portada != null) {
+                    var imagen = req.files.portada;
+                    imagen.mv('public/portadas/' +
+                        id + '.png', function(err) {
+                        if (err) {
+                            res.send("Error al subir la portada");
+                        } else {
+                            res.send("Agregada id: " + id);
+                        }
+                    });
+                }
+            }
+        });
+    });
 };

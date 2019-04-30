@@ -87,7 +87,8 @@ module.exports = {
                     db.close();
                 });
             }
-        })},
+        })
+    },
     obtenerUsuarios : function(criterio,funcionCallback){
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
 

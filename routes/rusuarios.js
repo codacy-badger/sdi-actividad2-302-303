@@ -14,7 +14,7 @@ module.exports = function(app, swig, gestorBD) {
         var usuario = {
             email : req.body.email,
             rol: 'estandar',
-            saldo: 100,
+            balance: 100,
             password : seguro
         }
         gestorBD.insertarUsuario(usuario, function(id) {
@@ -41,7 +41,9 @@ module.exports = function(app, swig, gestorBD) {
                 res.redirect("/identificarse" +
                     "?mensaje=Email o password incorrecto"+
                     "&tipoMensaje=alert-danger ");
-            } else { req.session.usuario = usuarios[0].email;
+            } else {
+                req.session.usuario = usuarios[0].email;
+                req.session.balance = usuarios[0].balance;
                 res.redirect("/publicaciones");
             }
         });
