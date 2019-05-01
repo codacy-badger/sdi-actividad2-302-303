@@ -31,11 +31,16 @@
         {% if vendedor != '' %}
           <li id="mUsuario"> <a>Usuario: {{usuario}}</a> </li>
           <li id="mBalance"> <a>Dinero: {{balance}}</a> </li>
-        {% endif %}}
+        {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
+        {% if vendedor == '' %}
 	    <li><a href="/registrarse"><span class="glyphicon glyphicon-user"></span> Registrate</a></li>
         <li><a href="/identificarse"><span class="glyphicon glyphicon-log-in"></span> Identifícate</a></li>
+        {% endif %}}
+        {% if vendedor != '' %}
+        <li><a href="/identificarse"><span class="glyphicon glyphicon-log-out"></span> Desconectarse</a></li>
+        {% endif %}
       </ul>
     </div>
   </div>

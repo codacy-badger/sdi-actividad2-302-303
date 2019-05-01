@@ -1,4 +1,4 @@
-module.exports = function(app, swig, gestorBD) {
+module.exports = function(app, swig, gestorBD, validator) {
 
     app.get("/usuarios", function(req, res) { res.send("ver usuarios");
     });
@@ -9,21 +9,29 @@ module.exports = function(app, swig, gestorBD) {
     });
 
     app.post('/usuario', function(req, res) {
-        var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
-            .update(req.body.password).digest('hex');
-        var usuario = {
-            email : req.body.email,
-            rol: 'estandar',
-            balance: 100,
-            password : seguro
+        if(validator.validaContraseña(req.body.password,req.body.password2)){
+            res.redirect("/registrarse?mensaje=Error al registrar usuario, las contraseñas no coinciden");
         }
-        gestorBD.insertarUsuario(usuario, function(id) {
-            if (id == null){
-                res.redirect("/registrarse?mensaje=Error al registrar usuario")
-            } else {
-                res.redirect("/identificarse?mensaje=Nuevo usuario registrado");
+        else {
+            var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
+                .update(req.body.password).digest('hex');
+
+            var usuario = {
+                email: req.body.email,
+                nombre: req.body.nombre,
+                apellidos: req.body.apellidos,
+                rol: 'estandar',
+                balance: 100,
+                password: seguro
             }
-        });
+            gestorBD.insertarUsuario(usuario, function (id) {
+                if (id == null) {
+                    res.redirect("/registrarse?mensaje=Error al registrar usuario")
+                } else {
+                    res.redirect("/tienda");
+                }
+            });
+        }
     });
     app.get("/identificarse", function(req, res) {
         var respuesta = swig.renderFile('views/bidentificacion.html', {});
@@ -51,5 +59,50 @@ module.exports = function(app, swig, gestorBD) {
     app.get('/desconectarse', function (req, res) {
         req.session.usuario = null; res.send("Usuario desconectado");
     });
+    app.get("/admin", function(req, res) {
+        gestorBD.obtenerUsuarios({}, function(usuarios) {
+            if (usuarios == null) {
+                res.send("Error al listar ");
+            } else {
+                var respuesta = swig.renderFile('views/admin.html',
+                    {
+                        usuarios : usuarios
+                    }
+                );
+                res.send(respuesta);
+            }
+        });
+    });
+    app.post("/admin/delete", function(req, res) {
+        console.log(req.body.ch); // to get array of checked checkbox
+        var usuariosarray = req.body.ch;
+        if (Array.isArray(usuariosarray)) {
+        for (var usuarios in usuariosarray) {
+            var usuariolimpio = usuarios.substring(0, usuarios.length - 1);
+            console.log(usuariolimpio);
+            var criterio = {"email": usuariolimpio};
+            gestorBD.eliminarUsuario(criterio, function (usuarios) {
+                if (usuarios == null) {
+                    res.send(respuesta);
+                }
+            });
+        }
+    }else
+    {
+        var usuariolimpio = usuariosarray.substring(0, usuariosarray.length - 1);
+        console.log(usuariolimpio);
+        var criterio = {"email": usuariolimpio};
+        gestorBD.eliminarUsuario(criterio, function (usuarios) {
+            if (usuarios == null) {
+                res.send(respuesta);
+            }
+        });
+    }
+
+        res.redirect("/admin" +
+            "?mensaje=Usuarios borrados"+
+            "&tipoMensaje=alert-danger ");
+
+        });
 
 };

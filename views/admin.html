@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% block titulo %} Mis publicaciones {% endblock %}
+
+{% block contenido_principal %}
+<h2>Opciones Administrador</h2>
+
+<!-- Agregar Producto -->
+<div class="row text-right">
+    <p>Bienvenido Admin</p>
+</div>
+<form class="form-horizontal" method="post" action="/admin/delete" >
+<div class="table-responsive">
+    <table id="tablauser" class="table table-hover">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th class="col-md-1"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.apellidos }}</td>
+            <td><a href="">Modificar</a> <br>
+            <td><input id="chkbox" type="checkbox" name="ch" value={{ usuario.email }}/></td>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <input id="delete" type="submit" value="Borrar" class="btn btn-success pull-left" />
+</div>
+</form>
+{% endblock %}
+<script>
+    $("#delete").click(function (event) {
+        event.preventDefault();
+        var searchIDs = $("#tablauser input:checkbox:checked").map(function () {
+            return this;
+        }).get();
+        console.log("selected::::" + searchIDs);
+        $.ajax({
+            url:'/admin/delete',type:'post',
+            data:{searchid:searchIDs},
+            success:function(response){
+                console.log(response);
+            }
+        });
+    });
+</script>
