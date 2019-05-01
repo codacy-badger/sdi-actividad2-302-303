@@ -172,6 +172,12 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
             res.redirect("/tienda");
             return;
         }
+        if(req.body.precio <= 0){
+            res.redirect("/admin" +
+                "?mensaje=Usuarios borrados"+
+                "&tipoMensaje=alert-danger ");
+        }
+        else{
         var producto = {
             nombre : req.body.nombre,
             descripcion : req.body.descripcion,
@@ -196,5 +202,5 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
                 }
             }
         });
-    });
+    }});
 };
