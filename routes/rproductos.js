@@ -273,11 +273,13 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                 "&tipoMensaje=alert-danger ");
         }
         else {
+            var date= new Date();
             var producto = {
                 nombre: req.body.nombre,
                 descripcion: req.body.descripcion,
                 precio: req.body.precio,
-                vendedor: req.session.usuario
+                vendedor: req.session.usuario,
+                fecha: date.getDay() + "/" + date.getMonth()+1 + "/" + date.getFullYear()
             }
             // Conectarse
             gestorBD.insertarProducto(producto, function (id) {

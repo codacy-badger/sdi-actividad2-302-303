@@ -10,8 +10,9 @@
 		  </div>
 		  <div class="media-body">
 			  <h2>{{ productos.nombre }}</h2>
-			  <p>{{ productos.vendedor }}</p>
-			  <p>{{ productos.genero }}</p>
+			  <p>Vendedor: {{ productos.vendedor }}</p>
+			  <p>Descripción: {{ productos.descripcion }}</p>
+			  <p>Fecha: {{ productos.fecha }}</p>
 			  <a class="btn btn-primary pull-right"
 				 href="">Este producto ya está vendido</a>
 			 <!-- Cambiar el precio por "reproducir" si ya está comprada -->
@@ -20,39 +21,5 @@
 	  </div>
 	  
 	 <!-- -->
-	 <div class="row" style="margin-top: 20px;" >
-		<div class="media col-xs-10">
-			  <div class="media-left media-middle">
-				<a href="#">
-				  <img class="media-object" src="img/user.png" >
-				</a>
-			  </div>
-			  <div class="media-body">
-				<h4 class="media-heading">Middle aligned media</h4>
-				Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-			  </div>
-		  </div>
-		<div class="media col-xs-10">
-			  <div class="media-left media-middle">
-				<a href="#">
-				  <img class="media-object" src="img/user.png" >
-				</a>
-			  </div>
-			  <div class="media-body">
-				<h4 class="media-heading">Middle aligned media</h4>
-				Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-			  </div>
-		  </div>
-		<div class="media col-xs-10">
-			  <div class="media-left media-middle">
-				<a href="#">
-				  <img class="media-object" src="img/user.png" >
-				</a>
-			  </div>
-			  <div class="media-body">
-				<h4 class="media-heading">Middle aligned media</h4>
-				Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-			  </div>
-		  </div>
-	  </div>
+
 {% endblock %}
