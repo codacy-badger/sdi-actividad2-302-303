@@ -1,7 +1,7 @@
 module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
 
     app.get("/productos", function(req, res) {
-            var respuesta = swig.renderFile('views/tienda.html', {
+            var respuesta = swig.renderFile('views/btienda.html', {
                 vendedor: 'Tienda de Productos',
                 Productos: Productos
             });
@@ -42,9 +42,12 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                 for(var i = pg-2 ; i <= pg+2 ; i++){
                     if ( i > 0 && i <= ultimaPg){ paginas.push(i);
                     }
-                } var respuesta = swig.renderFile('views/btienda.html', {
-                    productos : productos, paginas : paginas, actual : pg
-                });
+                }
+                var respuesta = mostrarVista.show('views/btienda.html', {
+                    "productos": productos, paginas : paginas, actual : pg,
+                    "vendedor": req.session.usuario,
+                    "balance": req.session.balance
+                }, req.session, swig)
                 res.send(respuesta);
             }
         });
@@ -78,12 +81,14 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
             if ( productos == null ){
                 res.send("Error al modificar");
             } else {
-                var respuesta = swig.renderFile('views/bproductoModificar.html',
-                    {
-                        producto : productos[0]
-                    }
-                    );
+                var respuesta = mostrarVista.show('views/bproductoModificar.html', {
+                    "productos": productos[0],
+                    "vendedor": req.session.usuario,
+                    "balance": req.session.balance
+                }, req.session, swig)
                 res.send(respuesta);
+
+
             }
         }); }
     });
@@ -134,10 +139,11 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
             if ( productos == null ){
                 res.send(respuesta);
             } else {
-                var respuesta = swig.renderFile('views/bproducto.html',
-                    {
-                        producto : productos[0]
-                    });
+                var respuesta = mostrarVista.show('views/bproducto.html', {
+                    "productos": productos[0],
+                    "vendedor": req.session.usuario,
+                    "balance": req.session.balance
+                }, req.session, swig)
                 res.send(respuesta);
             }
         });
@@ -168,9 +174,11 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                 }
                 var criterio = { "_id" : { $in: productosCompradasIds } }
                 gestorBD.obtenerProductos(criterio ,function(productos){
-                    var respuesta = swig.renderFile('views/bcompras.html', {
-                        productos: productos
-                    });
+                    var respuesta = mostrarVista.show('views/bproducto.html', {
+                        "productos": productos,
+                        "vendedor": req.session.usuario,
+                        "balance": req.session.balance
+                    }, req.session, swig)
                     res.send(respuesta);
                 });
             }
@@ -198,6 +206,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                                 if(productos == null){
                                     res.send("error");
                                 }else {
+                                    if(usuarios[0].balance - productos[0].precio >= 0){
                                     var usuario = {
                                         email : usuarios[0].email,
                                         nombre : usuarios[0].nombre,
@@ -218,7 +227,11 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                                             res.send(respuesta);
                                         }
                                     });
-                            }
+                            }else{
+                                        var respuesta = swig.renderFile('views/bInsuficiente.html', {}
+                                        );
+                                        res.send(respuesta);
+                                    }}
                         });
                 }
             });
