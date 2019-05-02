@@ -12,8 +12,9 @@
     <table id="tablauser" class="table table-hover">
         <thead>
         <tr>
+            <th>Email</th>
             <th>Nombre</th>
-            <th>Descripcion</th>
+            <th>Apellidos</th>
             <th class="col-md-1"></th>
         </tr>
         </thead>
@@ -23,9 +24,8 @@
             <td>{{ usuario.email }}</td>
             <td>{{ usuario.nombre }}</td>
             <td>{{ usuario.apellidos }}</td>
-            <td><a href="">Modificar</a> <br>
             <td><input id="chkbox" type="checkbox" name="ch" value={{ usuario.email }}/></td>
-            </td>
+
         </tr>
         {% endfor %}
         </tbody>

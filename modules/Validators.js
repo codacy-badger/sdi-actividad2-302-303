@@ -5,5 +5,12 @@ module.exports = {
         }
         return false;
 
+    },
+    validaAdmin : function(session) {
+        if(session == 'admin@admin.com'){
+            return true;
+        }
+        return false;
+
     }
 };

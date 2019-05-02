@@ -1,15 +1,19 @@
-module.exports = function(app, swig, gestorBD, mostrarVista) {
+module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
 
     app.get("/productos", function(req, res) {
-        var respuesta = swig.renderFile('views/tienda.html', {
-            vendedor : 'Tienda de Productos',
-            Productos : Productos
-        });
-        res.send(respuesta);
+            var respuesta = swig.renderFile('views/tienda.html', {
+                vendedor: 'Tienda de Productos',
+                Productos: Productos
+            });
+            res.send(respuesta);
+
     });
 
     app.get('/productos/agregar', function (req, res) {
-        if ( req.session.usuario == null || req.session.usuario == 'admin@admin.com') {
+        if(validator.validaAdmin(req.session.usuario)){
+            res.redirect('/admin');
+        }
+        if ( req.session.usuario == null ) {
             res.redirect("/tienda");
             return;
         }
@@ -46,22 +50,29 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
         });
     });
     app.get("/publicaciones", function(req, res) {
-        var criterio = { vendedor : req.session.usuario };
-        gestorBD.obtenerProductos(criterio, function(productos) {
-            if (productos == null) {
-                res.send("Error al listar ");
-            } else {
-                var respuesta =  mostrarVista.show('views/bpublicaciones.html', {
-                    "productos" : productos,
-                    "vendedor" : req.session.usuario,
-                    "balance" : req.session.balance
-                }, req.session, swig)
-                res.send(respuesta);
-            }
-        });
+        if(validator.validaAdmin(req.session.usuario)){
+            res.redirect('/admin');
+        } else {
+            var criterio = {vendedor: req.session.usuario};
+            gestorBD.obtenerProductos(criterio, function (productos) {
+                if (productos == null) {
+                    res.send("Error al listar ");
+                } else {
+                    var respuesta = mostrarVista.show('views/bpublicaciones.html', {
+                        "productos": productos,
+                        "vendedor": req.session.usuario,
+                        "balance": req.session.balance
+                    }, req.session, swig)
+                    res.send(respuesta);
+                }
+            });
+        }
     });
 
     app.get('/producto/modificar/:id', function (req, res) {
+        if(validator.validaAdmin(req.session.usuario)){
+            res.redirect('/admin');
+        } else {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerProductos(criterio,function(productos){
             if ( productos == null ){
@@ -74,10 +85,13 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
                     );
                 res.send(respuesta);
             }
-        });
+        }); }
     });
 
     app.post('/producto/modificar/:id', function (req, res) {
+        if(validator.validaAdmin(req.session.usuario)){
+            res.redirect('/admin');
+        } else {
         var id = req.params.id; var criterio = { "_id" : gestorBD.mongo.ObjectID(id) };
         var producto = {
             nombre : req.body.nombre,
@@ -97,7 +111,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
                 });
             }
         });
-    });
+    }});
     function modificarPortada(files, id, callback){
         if (files.portada != null) {
             var imagen =files.portada;
@@ -112,6 +126,9 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
     };
 
     app.get('/producto/:id', function (req, res) {
+            if(validator.validaAdmin(req.session.usuario)){
+                res.redirect('/admin');
+            } else {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerProductos(criterio,function(productos){
             if ( productos == null ){
@@ -124,8 +141,11 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
                 res.send(respuesta);
             }
         });
-    }),
+    }}),
         app.get('/producto/eliminar/:id', function (req, res) {
+                if(validator.validaAdmin(req.session.usuario)){
+                    res.redirect('/admin');
+                } else {
             var criterio = {"_id" : gestorBD.mongo.ObjectID(req.params.id) };
             gestorBD.eliminarProducto(criterio,function(productos){
                 if ( productos == null ){
@@ -134,8 +154,11 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
                     res.redirect("/publicaciones");
                 }
             });
-        }),
+        }}),
         app.get('/compras', function (req, res) {
+                if(validator.validaAdmin(req.session.usuario)){
+                    res.redirect('/admin');
+                } else {
             var criterio = { "usuario" : req.session.usuario };
             gestorBD.obtenerCompras(criterio ,function(compras){ if (compras == null) {
                 res.send("Error al listar "); } else {
@@ -152,8 +175,11 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
                 });
             }
             });
-        }),
+        }}),
         app.get('/producto/comprar/:id', function (req, res) {
+            if(validator.validaAdmin(req.session.usuario)){
+                res.redirect('/admin');
+            } else {
             var productoId = gestorBD.mongo.ObjectID(req.params.id);
             var compra = {
                 usuario : req.session.usuario,
@@ -163,11 +189,44 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
                 if ( idCompra == null ){
                     res.send(respuesta);
                 } else {
-                    res.redirect("/compras");
+                    gestorBD.obtenerUsuarios({"email" : req.session.usuario },function (usuarios) {
+                        if (usuarios == null) {
+                            res.send("Error al listar ");
+                        } else {
+
+                            gestorBD.obtenerProductos({"_id" : productoId }, function(productos){
+                                if(productos == null){
+                                    res.send("error");
+                                }else {
+                                    var usuario = {
+                                        email : usuarios[0].email,
+                                        nombre : usuarios[0].nombre,
+                                        apellidos : usuarios[0].apellidos,
+                                        balance : usuarios[0].balance - productos[0].precio,
+                                        password : usuarios[0].password
+                                    }
+                                    gestorBD.modificarUsuario({"email" : usuarios[0].email}, usuario, function(result){
+                                        if(result == null){
+                                            res.send("error");
+                                        } else{
+                                            req.session.balance = usuario.balance;
+                                            respuesta = mostrarVista.show('views/bcompras.html', {
+                                                "productos": productos,
+                                                "vendedor": req.session.usuario,
+                                                "balance": req.session.balance
+                                            }, req.session, swig)
+                                            res.send(respuesta);
+                                        }
+                                    });
+                            }
+                        });
                 }
             });
-        });
+        }})}});
     app.post("/producto", function(req, res) {
+        if(validator.validaAdmin(req.session.usuario)){
+            res.redirect('/admin');
+        }
         if ( req.session.usuario == null){
             res.redirect("/tienda");
             return;
@@ -177,30 +236,31 @@ module.exports = function(app, swig, gestorBD, mostrarVista) {
                 "?mensaje=Usuarios borrados"+
                 "&tipoMensaje=alert-danger ");
         }
-        else{
-        var producto = {
-            nombre : req.body.nombre,
-            descripcion : req.body.descripcion,
-            precio : req.body.precio,
-            vendedor: req.session.usuario
-        }
-        // Conectarse
-        gestorBD.insertarProducto(producto, function(id){
-            if (id == null) {
-                res.send("Error al insertar producto");
-            } else {
-                if (req.files.portada != null) {
-                    var imagen = req.files.portada;
-                    imagen.mv('public/portadas/' +
-                        id + '.png', function(err) {
-                        if (err) {
-                            res.send("Error al subir la portada");
-                        } else {
-                            res.send("Agregada id: " + id);
-                        }
-                    });
-                }
+        else {
+            var producto = {
+                nombre: req.body.nombre,
+                descripcion: req.body.descripcion,
+                precio: req.body.precio,
+                vendedor: req.session.usuario
             }
-        });
-    }});
+            // Conectarse
+            gestorBD.insertarProducto(producto, function (id) {
+                if (id == null) {
+                    res.send("Error al insertar producto");
+                } else {
+                    if (req.files.portada != null) {
+                        var imagen = req.files.portada;
+                        imagen.mv('public/portadas/' +
+                            id + '.png', function (err) {
+                            if (err) {
+                                res.send("Error al subir la portada");
+                            } else {
+                                res.send("Agregada id: " + id);
+                            }
+                        });
+                    }
+                }
+            })
+        }})
 };
+
