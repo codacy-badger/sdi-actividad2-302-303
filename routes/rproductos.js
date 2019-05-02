@@ -197,7 +197,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                 }
                 var criterio = { "_id" : { $in: productosCompradasIds } }
                 gestorBD.obtenerProductos(criterio ,function(productos){
-                    var respuesta = mostrarVista.show('views/bproducto.html', {
+                    var respuesta = mostrarVista.show('views/bcompras.html', {
                         "productos": productos,
                         "vendedor": req.session.usuario,
                         "balance": req.session.balance
