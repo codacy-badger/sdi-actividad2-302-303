@@ -71,7 +71,7 @@ module.exports = function(app, swig, gestorBD, validator) {
     });
     app.get('/desconectarse', function (req, res) {
         req.session.usuario = null;
-        res.send("Usuario desconectado");
+        res.redirect("/identificarse");
     });
     app.get("/admin", function (req, res) {
         if(req.session.usuario=="admin@admin.com") {
