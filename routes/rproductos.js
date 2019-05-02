@@ -131,23 +131,45 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
     };
 
     app.get('/producto/:id', function (req, res) {
-            if(validator.validaAdmin(req.session.usuario)){
-                res.redirect('/admin');
-            } else {
-        var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
-        gestorBD.obtenerProductos(criterio,function(productos){
-            if ( productos == null ){
-                res.send(respuesta);
-            } else {
-                var respuesta = mostrarVista.show('views/bproducto.html', {
-                    "productos": productos[0],
-                    "vendedor": req.session.usuario,
-                    "balance": req.session.balance
-                }, req.session, swig)
-                res.send(respuesta);
-            }
-        });
-    }}),
+        if(validator.validaAdmin(req.session.usuario)){
+            res.redirect('/admin');
+        } else {
+            var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
+            gestorBD.obtenerProductos(criterio,function(productos){
+                if ( productos == null ){
+                    res.send(respuesta);
+                } else {
+                    var criterio = { "producto" : req.params._id };
+                    gestorBD.obtenerCompras(criterio ,function(compras){
+                        if (compras == null) {
+                            var respuesta = mostrarVista.show('views/bproducto.html', {
+                                "productos": productos[0],
+                                "vendedor": req.session.usuario,
+                                "balance": req.session.balance
+                            }, req.session, swig)
+                            res.send(respuesta);
+                        } else {
+                            if(compras.length >0){
+                                console.log("Funka");
+                                var respuesta = mostrarVista.show('views/bproductoComprado.html', {
+                                    "productos": productos[0],
+                                    "vendedor": req.session.usuario,
+                                    "balance": req.session.balance
+                                }, req.session, swig)
+                                res.send(respuesta);
+                            } else{
+                                var respuesta = mostrarVista.show('views/bproducto.html', {
+                                    "productos": productos[0],
+                                    "vendedor": req.session.usuario,
+                                    "balance": req.session.balance
+                                }, req.session, swig)
+                                res.send(respuesta);
+                            }
+
+                        }})
+                }
+            });
+        }}),
         app.get('/producto/eliminar/:id', function (req, res) {
                 if(validator.validaAdmin(req.session.usuario)){
                     res.redirect('/admin');
@@ -166,7 +188,8 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                     res.redirect('/admin');
                 } else {
             var criterio = { "usuario" : req.session.usuario };
-            gestorBD.obtenerCompras(criterio ,function(compras){ if (compras == null) {
+            gestorBD.obtenerCompras(criterio ,function(compras){
+                if (compras == null) {
                 res.send("Error al listar "); } else {
                 var productosCompradasIds = [];
                 for(i=0; i < compras.length; i++){
@@ -246,7 +269,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
         }
         if(req.body.precio <= 0){
             res.redirect("/admin" +
-                "?mensaje=Usuarios borrados"+
+                "?mensaje=Precio debe ser mayor que 0"+
                 "&tipoMensaje=alert-danger ");
         }
         else {
