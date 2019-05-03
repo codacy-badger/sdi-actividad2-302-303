@@ -186,5 +186,18 @@ module.exports = {
                 });
             }
         });
+    },
+    test: function () {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                db.collection("usuarios").drop(function(err, delOK) {
+                    if (err) throw err;
+                    if (delOK) console.log("Collection deleted");
+                    db.close();
+                });
+            }
+        });
     }
 };
