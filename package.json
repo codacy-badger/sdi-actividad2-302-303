@@ -8,6 +8,7 @@
     "express-fileupload": "^1.1.4",
     "express-session": "^1.16.1",
     "http": "0.0.0",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^2.2.33",
     "mongoose": "^5.5.4",
     "socket.io": "^2.2.0",

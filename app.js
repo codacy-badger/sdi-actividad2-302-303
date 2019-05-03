@@ -38,7 +38,6 @@ routerUsuarioSession.use(function(req, res, next) {
         // dejamos correr la petición
         next();
     } else {
-        console.log("va a : "+req.session.destino);
         res.redirect("/identificarse");
     }
 });
@@ -86,6 +85,8 @@ routerUsuarioToken.use(function(req, res, next) {
 
 // Aplicar routerUsuarioToken
 app.use('/api/producto', routerUsuarioToken);
+app.use('/api/mensaje', routerUsuarioToken);
+app.use('/api/mensajes/:id', routerUsuarioToken);
 
 //routerUsuarioVendedor
 var routerUsuarioVendedor = express.Router();
