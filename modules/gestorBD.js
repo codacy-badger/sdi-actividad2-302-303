@@ -127,6 +127,7 @@ module.exports = {
             if (err) {
                 funcionCallback(null);
             } else {
+                console.log(criterio);
                 var collection = db.collection('usuarios');
                 collection.find(criterio).toArray(function(err, usuarios) {
                     if (err) { funcionCallback(null);
@@ -159,10 +160,12 @@ module.exports = {
                 funcionCallback(null);
             } else {
                 var collection = db.collection('productos');
+                console.log(criterio);
                 collection.find(criterio).toArray(function(err, productos) {
                     if (err) {
                         funcionCallback(null);
                     } else {
+                        console.log("PP")
                         funcionCallback(productos);
                     }
                     db.close();
@@ -177,23 +180,6 @@ module.exports = {
             } else {
                 var collection = db.collection('productos');
                 collection.insert(producto, function(err, result) {
-                    if (err) {
-                        funcionCallback(null);
-                    } else {
-                        funcionCallback(result.ops[0]._id);
-                    }
-                    db.close();
-                });
-            }
-        });
-    },
-    insertarMensaje: function (mensaje, funcionCallback) {
-        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
-            if (err) {
-                funcionCallback(null);
-            } else {
-                var collection = db.collection('mensajes');
-                collection.insert(mensaje, function(err, result) {
                     if (err) {
                         funcionCallback(null);
                     } else {
