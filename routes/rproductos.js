@@ -293,7 +293,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                             if (err) {
                                 res.send("Error al subir la portada");
                             } else {
-                                res.send("Agregada id: " + id);
+                                res.redirect("/publicaciones")
                             }
                         });
                     }
