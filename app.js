@@ -81,6 +81,8 @@ app.get('/', function (req, res) {
 //Rutas/controladores por lógica
 require("./routes/rusuarios.js")(app,swig, gestorBD,validator); // (app, param1, param2, etc.)
 require("./routes/rproductos.js")(app,swig, gestorBD, mostrarVista, validator); // (app, param1, param2, etc.)
+require("./routes/rapi.js")(app, gestorBD);
+
 // lanzar el servidor
 app.listen(app.get('port'), function() {
 console.log("Servidor activo");
