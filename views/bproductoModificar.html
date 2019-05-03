@@ -10,7 +10,7 @@
       <div class="col-sm-10">
         <input type="text" class="form-control" name="nombre"
             placeholder="Nombre de mi producto" required="true"
-            value="{{ producto.nombre }}" />
+            value="{{ productos.nombre }}" />
       </div>
     </div>
     <div class="form-group">
@@ -18,20 +18,20 @@
       <div class="col-sm-10">
           <input type="text" class="form-control" name="descripcion"
                  placeholder="Descripcion de mi producto" required="true"
-                 value="{{ producto.descripcion }}" />
+                 value="{{ productos.descripcion }}" />
       </div>
     </div>
     <div class="form-group">
       <label class="control-label col-sm-2" for="precio">Precio (€):</label>
       <div class="col-sm-10">          
         <input type="number" step="0.01" class="form-control" name="precio" 
-        	placeholder="2.50" required="true" value="{{ producto.precio }}"/>
+        	placeholder="2.50" required="true" value="{{ productos.precio }}"/>
       </div>
     </div>
     <div class="form-group">
       <label class="control-label col-sm-2" for="portada">Imagen portada:</label>
       <div class="col-sm-10">
-        <img src="/portadas/{{ producto._id.toString() }}.png" alt="logo" />
+        <img src="/portadas/{{ productos._id.toString() }}.png" alt="logo" />
         <input type="file" class="custom-file-input" name="portada"
         	accept=".png"  />
       </div>

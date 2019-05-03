@@ -72,13 +72,15 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
         }
     });
 
-    app.get('/producto/modificar/:id', function (req, res) {
+    app.get('/productos/modificar/:id', function (req, res) {
         if(validator.validaAdmin(req.session.usuario)){
+            console.log("Entra como admin y se redirecciona");
             res.redirect('/admin');
         } else {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerProductos(criterio,function(productos){
             if ( productos == null ){
+                console.log("da un error al modificar el producto");
                 res.send("Error al modificar");
             } else {
                 var respuesta = mostrarVista.show('views/bproductoModificar.html', {
@@ -86,11 +88,13 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                     "vendedor": req.session.usuario,
                     "balance": req.session.balance
                 }, req.session, swig)
+                console.log("respuesta---------------------" + respuesta);
+
                 res.send(respuesta);
-
-
             }
-        }); }
+        }
+        );
+        }
     });
 
     app.post('/producto/modificar/:id', function (req, res) {
