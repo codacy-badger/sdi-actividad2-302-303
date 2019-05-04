@@ -71,12 +71,12 @@
     function actualizarTabla(mensajes){
         $( "#tablaCuerpo" ).empty(); // Vaciar la tabla
         for (i = 0; i < mensajes.length; i++) {
+            var fecha=new Date(mensajes[i].time);
             $( "#tablaCuerpo" ).append(
                 "<tr id="+mensajes[i].autor+">"+
                 "<td>"+mensajes[i].autor+"</td>" +
                 "<td>"+mensajes[i].texto+"</td>" +
-                    //TODO La fecha se muestra en milisegundos desde 1970, no queda bien
-                "<td>"+Math.floor(mensajes[i].time/1000.0) +"</td>" +
+                "<td>"+fecha+"</td>" +
                 "</td>"+
                 "</tr>" );
         }
