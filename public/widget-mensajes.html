@@ -23,8 +23,9 @@
 
 
 <script>
-    console.log(to)
-
+    
+    setInterval("cargarMensajes()",5000);
+    
     $("#boton-enviar").click(function(){
         $.ajax({
             url: URLbase + "/mensaje",
