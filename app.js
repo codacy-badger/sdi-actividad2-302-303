@@ -94,7 +94,9 @@ routerUsuarioToken.use(function(req, res, next) {
 });
 
 // Aplicar routerUsuarioToken
+
 app.use('/api/producto', routerUsuarioToken);
+app.use('/api/misproducto', routerUsuarioToken);
 app.use('/api/mensaje', routerUsuarioToken);
 app.use('/api/mensajes', routerUsuarioToken);
 app.use('/api/conversacion', routerUsuarioToken);

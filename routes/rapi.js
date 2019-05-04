@@ -43,6 +43,22 @@ module.exports = function (app, gestorBD) {
         });
     });
 
+    app.get("/api/misproducto", function(req, res) {
+
+        var criterio={vendedor : res.usuario}
+        gestorBD.obtenerProductos( criterio , function(productos) {
+            if (productos == null) {
+                res.status(500);
+                res.json({
+                    error : "se ha producido un error"
+                })
+            } else {
+                res.status(200);
+                res.send( JSON.stringify(productos) );
+            }
+        });
+    });
+
     app.post("/api/mensaje", function(req, res) {
         var IDoferta=req.headers['id_oferta'] || req.body.id_oferta || req.query.id_oferta;
         var oferta = gestorBD.mongo.ObjectID(IDoferta);
@@ -71,8 +87,10 @@ module.exports = function (app, gestorBD) {
                                 }
                             gestorBD.insertarConversacion(criterio, conversacion, function(bien){
                                 if(!bien){
+                                    res.status(500);
                                     res.send("Error al insertar conversacion");
                                 }else{
+                                    res.status(200);
                                     res.send("Conversacion insertada con exito");
                                 }
                             });
@@ -96,8 +114,10 @@ module.exports = function (app, gestorBD) {
                             }
                             gestorBD.insertarMensaje(chat, function (id) {
                                 if (id == null) {
+                                    res.status(500);
                                     res.send("Error al insertar mensaje");
                                 } else {
+                                    res.status(200);
                                     res.send("Mensaje insertado con exito");
                                 }
                             });
@@ -116,8 +136,10 @@ module.exports = function (app, gestorBD) {
                             }
                             gestorBD.insertarMensaje(chat, function (id) {
                                 if (id == null) {
+                                    res.status(500);
                                     res.send("Error al insertar mensaje");
                                 }else{
+                                    res.status(200);
                                     res.send("Mensaje insertado con exito");
                                 }
                             });
@@ -132,8 +154,10 @@ module.exports = function (app, gestorBD) {
                                 }
                             gestorBD.insertarConversacion(criterio, conversacion, function(bien){
                                 if(!bien){
+                                    res.status(500);
                                     res.send("Error al insertar conversacion");
                                 }else{
+                                    res.status(200);
                                     res.send("Conversacion insertada con exito");
                                 }
                             });
@@ -173,6 +197,7 @@ module.exports = function (app, gestorBD) {
                         }
                     });
                 } else {
+                    res.status(500);
                     res.send("Error al ver conversacion");
                 }
             }
@@ -196,15 +221,16 @@ module.exports = function (app, gestorBD) {
                 } else {
                     criterioMensajes = {oferta: oferta, usuario: res.usuario}
                 }
-                console.log(criterioMensajes)
                 gestorBD.obtenerMensajes( criterioMensajes , function(mensajes) {
                     if (mensajes == null) {
                         res.status(500);
                         res.json({
                             error : "se ha producido un error"
                         })
+                    }else if (mensajes[0] == null) {
+                        res.status(200);
+                        res.send( JSON.stringify([]) )
                     } else {
-                        console.log(mensajes)
                         res.status(200);
                         var array = []
                         for (var i = 0; i < mensajes[0].conversacion.length; i++) {
@@ -231,8 +257,10 @@ module.exports = function (app, gestorBD) {
                 if(con[0].usuario==res.usuario){
                     gestorBD.eliminarConversacion({"_id":conversacion},function (bien) {
                         if(bien==null) {
+                            res.status(500);
                             res.send("No se ha podido borrar");
                         }else{
+                            res.status(200);
                             res.send("Conversacion eliminada");
                         }
                     });
@@ -249,12 +277,15 @@ module.exports = function (app, gestorBD) {
                             if (producto[0].vendedor == res.usuario) {
                                 gestorBD.eliminarConversacion({"_id":conversacion},function (bien) {
                                     if(bien==null) {
+                                        res.status(500);
                                         res.send("No se ha podido borrar");
                                     }else{
+                                        res.status(200);
                                         res.send("Conversacion eliminada");
                                     }
                                 });
                             } else{
+                                res.status(500);
                                 res.send("No se puede eliminar conversaciones ajenas");
                             }
                         }
@@ -280,8 +311,10 @@ module.exports = function (app, gestorBD) {
                     var operacionLeer={$set:{"conversacion.$.leido":true}}
                     gestorBD.marcarLeido(criterioLeido,operacionLeer,function (bien) {
                         if(bien==null) {
+                            res.status(500);
                             res.send("No se ha podido marcar como leido");
                         }else{
+                            res.status(200);
                             res.send("Conversacion marcada como leida");
                         }
                     });
@@ -296,19 +329,20 @@ module.exports = function (app, gestorBD) {
                             })
                         } else {
                             if (producto[0].vendedor == res.usuario) {
+                                //TODO Se tiene que editar un campo dentro de un objeto dentro de un array dentro de un objeto
                                 var criterioLeido={"_id":conversacion, 'conversacion.autor': {$ne:res.usuario}}
                                 var operacionLeer={$set:{'conversacion.$.leido':true}}
-                                gestorBD.obtenerMensajes(criterioLeido, function(men) {
-                                    console.log(men)
-                                });
                                 gestorBD.marcarLeido(criterioLeido,operacionLeer,function (bien) {
                                     if(bien==null) {
+                                        res.status(500);
                                         res.send("No se ha podido marcar como leido");
                                     }else{
+                                        res.status(200);
                                         res.send("Conversacion marcada como leida");
                                     }
                                 });
                             } else{
+                                res.status(500);
                                 res.send("No se puede marcar como leido conversaciones ajenas");
                             }
                         }

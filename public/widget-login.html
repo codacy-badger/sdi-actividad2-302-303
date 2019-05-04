@@ -17,6 +17,7 @@
     </div>
 </div>
 <script>
+    var usuario
     $("#boton-login").click(function(){
     $.ajax({
         url: URLbase + "/autentificar", type: "POST", data: {
@@ -25,7 +26,7 @@
         },
         dataType: 'json',
         success: function(respuesta) {
-            console.log(respuesta.token); // <- Prueba
+            usuario=$("#email").val();
             token = respuesta.token;
             $( "#contenedor-principal" ).load( "widget-productos.html");
         },

@@ -1,0 +1,82 @@
+
+<div id="widget-productos" >
+    <button class="btn" onclick="cargarConversaciones()" >Actualizar</button>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Usuario</th>
+            <th>Ver Chat</th>
+            <th class="col-md-1"></th>
+        </tr>
+        </thead>
+        <tbody id="tablaCuerpo">
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+
+    var productos;
+    var mostrar=[];
+
+    function cargarConversaciones() {
+        cargarProductos()
+    }
+    function cargarProductos(){
+        $.ajax({
+            url: URLbase + "/misproducto",
+            type: "GET",
+            data: { },
+            dataType: 'json',
+            headers: { "token": token },
+            success: function(respuesta) {
+                productos = respuesta;
+                montarTabla(productos);
+            },
+            error : function (error){
+                $( "#contenedor-principal" ).load("widget-login.html");
+            }
+        });
+    }
+
+    function montarTabla(productos){
+        for (var i = 0; i < productos.length; i++) {
+            $.ajax({
+                url: URLbase + "/conversacion",
+                type: "GET",
+                data: { },
+                dataType: 'json',
+                headers: { "token": token,"id_oferta":productos[i]._id },
+                success: function(respuesta) {
+                    mostrar.push({
+                        usuario:respuesta,
+                        oferta:productos[i]._id,
+                        ofertaN:productos[i].nombre
+                    });
+                },
+                error : function (error){
+                    $( "#contenedor-principal" ).load("widget-login.html");
+                }
+            });
+        }
+        //TODO mostrar esta vacio
+        console.log(mostrar)
+        actualizarTabla();
+    }
+
+    function actualizarTabla(mensajes){
+        $( "#tablaCuerpo" ).empty(); // Vaciar la tabla
+        for (i = 0; i < mostrar.length; i++) {
+            $( "#tablaCuerpo" ).append(
+                "<tr id="+mostrar[i].oferta+">"+
+                "<td>"+mostrar[i].ofertaN+"</td>" +
+                "<td>"+mostrar[i].usuario+"</td>" +
+                "<td><a onclick=enviarMensaje('"+mostrar[i].oferta,mostrar[i].usuario+"')>Reanudar Chat</a></td>"+
+                "</tr>" );
+
+        }
+    }
+    cargarConversaciones();
+</script>
