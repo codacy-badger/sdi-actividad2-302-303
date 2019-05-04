@@ -217,6 +217,52 @@ module.exports = function (app, gestorBD) {
         });
     });
 
+    app.get('/api/eliminar/', function (req, res) {
+        var IDconver=req.headers['id_conversacion'] || req.body.id_conversacion || req.query.id_conversacion;
+        var conversacion = gestorBD.mongo.ObjectID(IDconver);
+        var criterio = {"_id" : conversacion }
+        gestorBD.obtenerMensajes(criterio, function (con) {
+            if (con == null) {
+                res.status(500);
+                res.json({
+                    error: "se ha producido un error"
+                })
+            } else {
+                if(con[0].usuario==res.usuario){
+                    gestorBD.eliminarConversacion({"_id":conversacion},function (bien) {
+                        if(!bien) {
+                            res.send("No se ha podido borrar");
+                        }else{
+                            res.send("Conversacion eliminada");
+                        }
+                    });
+                } else {
+                    var oferta = con[0].oferta;
+                    var criterio = {"_id": oferta}
+                    gestorBD.obtenerProductos(criterio, function (producto) {
+                        if (producto == null) {
+                            res.status(500);
+                            res.json({
+                                error: "se ha producido un error"
+                            })
+                        } else {
+                            if (producto[0].vendedor == res.usuario) {
+                                gestorBD.eliminarConversacion({"_id":conversacion},function (bien) {
+                                    if(!bien) {
+                                        res.send("No se ha podido borrar");
+                                    }else{
+                                        res.send("Conversacion eliminada");
+                                    }
+                                });
+                            } else{
+                                res.send("No se puede eliminar conversaciones ajenas");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
 
 
 }

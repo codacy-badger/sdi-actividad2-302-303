@@ -98,6 +98,8 @@ app.use('/api/producto', routerUsuarioToken);
 app.use('/api/mensaje', routerUsuarioToken);
 app.use('/api/mensajes', routerUsuarioToken);
 app.use('/api/conversacion', routerUsuarioToken);
+app.use('/api/leido', routerUsuarioToken);
+app.use('/api/eliminar', routerUsuarioToken);
 
 //routerUsuarioVendedor
 var routerUsuarioVendedor = express.Router();
