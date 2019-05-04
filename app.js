@@ -94,10 +94,10 @@ routerUsuarioToken.use(function(req, res, next) {
 });
 
 // Aplicar routerUsuarioToken
-app.use("/productos/agregar",routerUsuarioSession);
-app.use("/publicaciones",routerUsuarioSession);
-app.use("/producto/comprar",routerUsuarioSession);
-app.use("/compras",routerUsuarioSession);
+app.use('/api/producto', routerUsuarioToken);
+app.use('/api/mensaje', routerUsuarioToken);
+app.use('/api/mensajes', routerUsuarioToken);
+app.use('/api/conversacion', routerUsuarioToken);
 
 //routerUsuarioVendedor
 var routerUsuarioVendedor = express.Router();
