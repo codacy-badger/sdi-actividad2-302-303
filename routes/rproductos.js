@@ -24,7 +24,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
     app.get("/tienda", function(req, res) {
         var criterio = {};
         if( req.query.busqueda != null ){
-            criterio = {"nombre" : {$regex : ".*"+req.query.busqueda+".*"}
+            criterio = {"nombre" : {$regex : new RegExp(".*" + req.query.busqueda + ".*", "i")}
             };
         }
         var pg = parseInt(req.query.pg); // Es String !!!
