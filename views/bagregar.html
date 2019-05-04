@@ -4,30 +4,30 @@
 <h2>Agregar producto</h2> <form class="form-horizontal" method="post" action="/producto" encType="multipart/form-data">
     <div class="form-group">
         <label class="control-label col-sm-2" for="nombre">Nombre:</label>
-        <div class="col-sm-10"> <input type="text" class="form-control" name="nombre"
+        <div class="col-sm-10"> <input id="nombre" type="text" class="form-control" name="nombre"
                                        placeholder="Nombre de mi Producto" required="true" />
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-2" for="descripcion">Descripcion:</label>
-        <div class="col-sm-10"> <input type="text" class="form-control" name="descripcion"
+        <div class="col-sm-10"> <input id="descripcion" type="text" class="form-control" name="descripcion"
                                        placeholder="descripcion de mi Producto" required="true" />
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-2" for="precio">Precio (€):</label>
-        <div class="col-sm-10"> <input type="number" class="form-control" name="precio"
+        <div class="col-sm-10"> <input id="precio" type="number" class="form-control" name="precio"
                                        placeholder="2.50" required="true" />
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-sm-2" for="portada">Imagen portada:</label>
-        <div class="col-sm-10"> <input type="file" class="custom-file-input" name="portada" accept=".png" required/>
+        <div class="col-sm-10"> <input type="file" class="custom-file-input" name="portada" accept=".png"/>
         </div>
     </div>
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">Agregar</button>
+            <button id='btn' type="submit" class="btn btn-primary">Agregar</button>
         </div>
     </div>
 </form>

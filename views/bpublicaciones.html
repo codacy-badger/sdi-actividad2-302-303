@@ -23,7 +23,7 @@
 				<td>{{ producto.nombre }}</td>
 				<td>{{ producto.descripcion }}</td>
 				<td><a href="/productos/modificar/{{ producto._id.toString() }}">Modificar</a> <br>
-					<a href="/producto/eliminar/{{ producto._id.toString() }}">Eliminar</a> <br>
+					<a href="/producto/eliminar/{{ producto._id.toString() }}" id = 'del' name="deletebutton">Eliminar</a> <br>
 			    </td>
 			</tr>
 		{% endfor %}

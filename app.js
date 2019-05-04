@@ -23,12 +23,18 @@ app.use(bodyParser.urlencoded({
     extended: true }));
 
 // Variables
+/*app.set('port', 8081);
+app.set('db','mongodb://admin:admin@mywallapop-shard-00-00-crogy.mongodb.net:27017,' +
+    'mywallapop-shard-00-01-crogy.mongodb.net:27017,' +
+    'mywallapop-shard-00-02-crogy.mongodb.net:27017/test?ssl=true&replicaSet=myWallapop-shard-0&authSource=admin&retryWrites=true');
+app.set('clave','abcdefg'); app.set('crypto',crypto);
+*/
+
 app.set('port', 8081);
 app.set('db','mongodb://admin:admin@mywallapop-shard-00-00-crogy.mongodb.net:27017,' +
     'mywallapop-shard-00-01-crogy.mongodb.net:27017,' +
     'mywallapop-shard-00-02-crogy.mongodb.net:27017/test?ssl=true&replicaSet=myWallapop-shard-0&authSource=admin&retryWrites=true');
 app.set('clave','abcdefg'); app.set('crypto',crypto);
-
 
 // routerUsuarioSession
 var routerUsuarioSession = express.Router();

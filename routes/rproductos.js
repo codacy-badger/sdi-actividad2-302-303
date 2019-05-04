@@ -33,7 +33,12 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
         }
         gestorBD.obtenerProductosPg(criterio, pg , function(productos, total ) {
             if (productos == null) {
-                res.send("Error al listar ");
+                var respuesta = mostrarVista.show('views/btienda.html', {
+                    "productos": productos, paginas : paginas, actual : pg,
+                    "vendedor": req.session.usuario,
+                    "balance": req.session.balance
+                }, req.session, swig)
+                res.send(respuesta);
             } else {
                 var ultimaPg = total/4;
                 if (total % 4 > 0 ){ // Sobran decimales
@@ -120,7 +125,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                 });
             }
         });
-    }});
+    }}),
     function modificarPortada(files, id, callback){
         if (files.portada != null) {
             var imagen =files.portada;
@@ -132,48 +137,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
         } else {
             callback(true); // FIN
         }
-    };
-
-    app.get('/producto/:id', function (req, res) {
-        if(validator.validaAdmin(req.session.usuario)){
-            res.redirect('/admin');
-        } else {
-            var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
-            gestorBD.obtenerProductos(criterio,function(productos){
-                if ( productos == null ){
-                    res.send(respuesta);
-                } else {
-                    var criterio = { "producto" : req.params._id };
-                    gestorBD.obtenerCompras(criterio ,function(compras){
-                        if (compras == null) {
-                            var respuesta = mostrarVista.show('views/bproducto.html', {
-                                "productos": productos[0],
-                                "vendedor": req.session.usuario,
-                                "balance": req.session.balance
-                            }, req.session, swig)
-                            res.send(respuesta);
-                        } else {
-                            if(compras.length >0){
-                                console.log("Funka");
-                                var respuesta = mostrarVista.show('views/bproductoComprado.html', {
-                                    "productos": productos[0],
-                                    "vendedor": req.session.usuario,
-                                    "balance": req.session.balance
-                                }, req.session, swig)
-                                res.send(respuesta);
-                            } else{
-                                var respuesta = mostrarVista.show('views/bproducto.html', {
-                                    "productos": productos[0],
-                                    "vendedor": req.session.usuario,
-                                    "balance": req.session.balance
-                                }, req.session, swig)
-                                res.send(respuesta);
-                            }
-
-                        }})
-                }
-            });
-        }}),
+    },
         app.get('/producto/eliminar/:id', function (req, res) {
                 if(validator.validaAdmin(req.session.usuario)){
                     res.redirect('/admin');
@@ -181,9 +145,14 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
             var criterio = {"_id" : gestorBD.mongo.ObjectID(req.params.id) };
             gestorBD.eliminarProducto(criterio,function(productos){
                 if ( productos == null ){
-                    res.send(respuesta);
+                    res.send("Error");
                 } else {
-                    res.redirect("/publicaciones");
+                    var respuesta = mostrarVista.show('views/bcompras.html', {
+                        "productos": productos,
+                        "vendedor": req.session.usuario,
+                        "balance": req.session.balance
+                    }, req.session, swig)
+                    //res.send(respuesta);
                 }
             });
         }}),
@@ -290,19 +259,52 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                 if (id == null) {
                     res.send("Error al insertar producto");
                 } else {
-                    if (req.files.portada != null) {
-                        var imagen = req.files.portada;
-                        imagen.mv('public/portadas/' +
-                            id + '.png', function (err) {
-                            if (err) {
-                                res.send("Error al subir la portada");
-                            } else {
-                                res.redirect("/publicaciones")
-                            }
-                        });
+                    res.redirect("/publicaciones");
+
                     }
-                }
-            })
-        }})
+                });
+            }
+        }),
+
+        app.get('/producto/:id', function (req, res) {
+            if(validator.validaAdmin(req.session.usuario)){
+                res.redirect('/admin');
+            } else {
+                var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
+                gestorBD.obtenerProductos(criterio,function(productos){
+                    if ( productos == null ){
+                        res.send(respuesta);
+                    } else {
+                        var criterio = { "producto" : gestorBD.mongo.ObjectID(req.params._id) };
+                        gestorBD.obtenerCompras(criterio ,function(compras){
+                            if (compras == null) {
+                                var respuesta = mostrarVista.show('views/bproducto.html', {
+                                    "productos": productos[0],
+                                    "vendedor": req.session.usuario,
+                                    "balance": req.session.balance
+                                }, req.session, swig)
+                                res.send(respuesta);
+                            } else {
+                                if(compras.length >0){
+                                    console.log("Funka");
+                                    var respuesta = mostrarVista.show('views/bproductoComprado.html', {
+                                        "productos": productos[0],
+                                        "vendedor": req.session.usuario,
+                                        "balance": req.session.balance
+                                    }, req.session, swig)
+                                    res.send(respuesta);
+                                } else{
+                                    var respuesta = mostrarVista.show('views/bproducto.html', {
+                                        "productos": productos[0],
+                                        "vendedor": req.session.usuario,
+                                        "balance": req.session.balance
+                                    }, req.session, swig)
+                                    res.send(respuesta);
+                                }
+
+                            }})
+                    }
+                });
+            }});
 };
 
