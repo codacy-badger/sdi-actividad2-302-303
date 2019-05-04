@@ -251,7 +251,24 @@ module.exports = {
             });
         }
     });
-},
+    },
+    marcarLeido: function (criterio,operacion, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('mensajes');
+                collection.update(criterio,operacion, function(err, result) {
+                    if (err) {
+                        funcionCallback(false);
+                    } else {
+                        funcionCallback(true);
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
     test: function () {
         this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
             if (err) {

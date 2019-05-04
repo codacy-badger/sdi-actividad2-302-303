@@ -230,7 +230,7 @@ module.exports = function (app, gestorBD) {
             } else {
                 if(con[0].usuario==res.usuario){
                     gestorBD.eliminarConversacion({"_id":conversacion},function (bien) {
-                        if(!bien) {
+                        if(bien==null) {
                             res.send("No se ha podido borrar");
                         }else{
                             res.send("Conversacion eliminada");
@@ -248,7 +248,7 @@ module.exports = function (app, gestorBD) {
                         } else {
                             if (producto[0].vendedor == res.usuario) {
                                 gestorBD.eliminarConversacion({"_id":conversacion},function (bien) {
-                                    if(!bien) {
+                                    if(bien==null) {
                                         res.send("No se ha podido borrar");
                                     }else{
                                         res.send("Conversacion eliminada");
@@ -256,6 +256,60 @@ module.exports = function (app, gestorBD) {
                                 });
                             } else{
                                 res.send("No se puede eliminar conversaciones ajenas");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    });
+
+    app.get('/api/leido/', function (req, res) {
+        var IDconver=req.headers['id_conversacion'] || req.body.id_conversacion || req.query.id_conversacion;
+        var conversacion = gestorBD.mongo.ObjectID(IDconver);
+        var criterio = {"_id" : conversacion }
+        gestorBD.obtenerMensajes(criterio, function (con) {
+            if (con == null) {
+                res.status(500);
+                res.json({
+                    error: "se ha producido un error"
+                })
+            } else {
+                if(con[0].usuario==res.usuario){
+                    var criterioLeido={"_id":conversacion, "conversacion.autor": {$ne:res.usuario}}
+                    var operacionLeer={$set:{"conversacion.$.leido":true}}
+                    gestorBD.marcarLeido(criterioLeido,operacionLeer,function (bien) {
+                        if(bien==null) {
+                            res.send("No se ha podido marcar como leido");
+                        }else{
+                            res.send("Conversacion marcada como leida");
+                        }
+                    });
+                } else {
+                    var oferta = con[0].oferta;
+                    var criterio = {"_id": oferta}
+                    gestorBD.obtenerProductos(criterio, function (producto) {
+                        if (producto == null) {
+                            res.status(500);
+                            res.json({
+                                error: "se ha producido un error"
+                            })
+                        } else {
+                            if (producto[0].vendedor == res.usuario) {
+                                var criterioLeido={"_id":conversacion, 'conversacion.autor': {$ne:res.usuario}}
+                                var operacionLeer={$set:{'conversacion.$.leido':true}}
+                                gestorBD.obtenerMensajes(criterioLeido, function(men) {
+                                    console.log(men)
+                                });
+                                gestorBD.marcarLeido(criterioLeido,operacionLeer,function (bien) {
+                                    if(bien==null) {
+                                        res.send("No se ha podido marcar como leido");
+                                    }else{
+                                        res.send("Conversacion marcada como leida");
+                                    }
+                                });
+                            } else{
+                                res.send("No se puede marcar como leido conversaciones ajenas");
                             }
                         }
                     });
