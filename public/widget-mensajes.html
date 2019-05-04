@@ -1,0 +1,68 @@
+
+<div id="widget-productos" >
+    <button class="btn" onclick="cargarProductos()" >Actualizar</button>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Tus mensajes</th>
+            <th>Sus mensajes</th>
+            <th class="col-md-1"></th>
+        </tr>
+        </thead>
+        <tbody id="tablaCuerpo">
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+    //TODO
+    function enviarMensajes(){
+        $.ajax({
+            url: URLbase + "/mensaje",
+            type: "POST",
+            data: { },
+            dataType: 'json',
+            headers: { "token": token },
+            success: function(respuesta) {
+                actualizarTabla();
+            },
+            error : function (error){
+                $( "#contenedor-principal" ).load("widget-login.html");
+            }
+        });
+    }
+
+    var mensajes;
+    //TODO
+    function cargarMensajes(){
+        $.ajax({
+            url: URLbase + "/mensajes",
+            type: "GET",
+            data: { },
+            dataType: 'json',
+            headers: { "token": token },
+            success: function(respuesta) {
+                mensajes = respuesta;
+                actualizarTabla(respuesta);
+            },
+            error : function (error){
+                $( "#contenedor-principal" ).load("widget-login.html");
+            }
+        });
+    }
+    //TODO
+    function actualizarTabla(mensajes){
+        $( "#tablaCuerpo" ).empty(); // Vaciar la tabla
+        for (i = 0; i < mensajes.length; i++) {
+            $( "#tablaCuerpo" ).append(
+                "<tr id="+mensajes[i].autor+">"+
+                "<td>"+mensajes[i].nombre+"</td>" +
+                "<td>"+mensajes[i].texto+"</td>" +
+                "</td>"+
+                "</tr>" );
+
+        }
+    }
+    cargarMensajes();
+</script>
