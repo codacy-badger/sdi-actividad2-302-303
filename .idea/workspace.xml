@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6281c326-6442-4b4d-81d4-d151099fec2d" name="Default" comment="Arreglos para test">
-      <change afterPath="$PROJECT_DIR$/public/cliente.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/widget-login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/widget-productos.html" afterDir="false" />
+    <list default="true" id="6281c326-6442-4b4d-81d4-d151099fec2d" name="Default" comment="añadido jquery ( no funciona )">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/cliente.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/cliente.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/widget-login.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/widget-login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/widget-productos.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/widget-productos.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,17 +28,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="147" lean-forward="true" selection-start-line="46" selection-end-line="147" />
+            <state relative-caret-position="-11">
+              <caret line="23" selection-start-line="23" selection-end-line="23" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/cliente.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="47" column="58" selection-start-line="47" selection-start-column="58" selection-end-line="47" selection-end-column="58" />
+            <state relative-caret-position="231">
+              <caret line="42" column="21" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -46,8 +46,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/widget-login.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="20" column="71" lean-forward="true" selection-start-line="20" selection-start-column="71" selection-end-line="20" selection-end-column="71" />
+            <state relative-caret-position="207">
+              <caret line="21" column="20" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -55,17 +55,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/rapi.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="32" />
+            <state relative-caret-position="345">
+              <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/widget-productos.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="55" column="9" lean-forward="true" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
+            <state relative-caret-position="326">
+              <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -110,11 +110,11 @@
         <option value="$PROJECT_DIR$/chat/rmensajes.js" />
         <option value="$PROJECT_DIR$/chat/rapi.js" />
         <option value="$PROJECT_DIR$/modules/gestorBD.js" />
-        <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/public/widget-productos.html" />
         <option value="$PROJECT_DIR$/public/portadas/widget-login.html" />
         <option value="$PROJECT_DIR$/public/widget-login.html" />
         <option value="$PROJECT_DIR$/public/cliente.html" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/public/widget-productos.html" />
       </list>
     </option>
   </component>
@@ -210,7 +210,7 @@
       <updated>1556867400807</updated>
       <workItem from="1556867401927" duration="358000" />
       <workItem from="1556867835364" duration="467000" />
-      <workItem from="1556959302355" duration="1556000" />
+      <workItem from="1556959302355" duration="2315000" />
     </task>
     <task id="LOCAL-00001" summary="Arreglos para test">
       <created>1556959772565</created>
@@ -219,15 +219,21 @@
       <option name="project" value="LOCAL" />
       <updated>1556959772565</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="añadido jquery ( no funciona )">
+      <created>1556961082319</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1556961082319</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2381000" />
+    <option name="totallyTimeSpent" value="3140000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="806" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24947146" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -253,7 +259,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Arreglos para test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Arreglos para test" />
+    <MESSAGE value="añadido jquery ( no funciona )" />
+    <option name="LAST_COMMIT_MESSAGE" value="añadido jquery ( no funciona )" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/routes/rproductos.js">
@@ -273,27 +280,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/widget-productos.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="55" column="9" lean-forward="true" selection-start-line="55" selection-start-column="9" selection-end-line="55" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/rapi.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="147" lean-forward="true" selection-start-line="46" selection-end-line="147" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/gestorBD.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="262">
@@ -301,17 +287,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-11">
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/widget-login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="20" column="71" lean-forward="true" selection-start-line="20" selection-start-column="71" selection-end-line="20" selection-end-column="71" />
+        <state relative-caret-position="207">
+          <caret line="21" column="20" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/rapi.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/cliente.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="47" column="58" selection-start-line="47" selection-start-column="58" selection-end-line="47" selection-end-column="58" />
+        <state relative-caret-position="231">
+          <caret line="42" column="21" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/widget-productos.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="326">
+          <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
         </state>
       </provider>
     </entry>
