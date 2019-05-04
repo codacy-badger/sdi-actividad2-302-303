@@ -30,6 +30,17 @@ app.set('db','mongodb://admin:admin@mywallapop-shard-00-00-crogy.mongodb.net:270
 app.set('clave','abcdefg'); app.set('crypto',crypto);
 */
 
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, UPDATE, PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token");
+// Debemos especificar todas las headers que se aceptan. Content-Type , token
+    next();
+});
+
+
 app.set('port', 8081);
 app.set('db','mongodb://admin:admin@mywallapop-shard-00-00-crogy.mongodb.net:27017,' +
     'mywallapop-shard-00-01-crogy.mongodb.net:27017,' +
