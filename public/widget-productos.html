@@ -44,10 +44,32 @@
                 "<td>"+productosMostrar[i].descripcion+"</td>" +
                 "<td>"+productosMostrar[i].precio+"</td>" +
                 "<td>"+productosMostrar[i].vendedor+"</td>" +
-                "</td>"+
+                "<a onclick=enviarMensaje('"+productosMostrar[i]._id+"')>Enviar Mensaje</a>"+
                 "</tr>" );
 
         }
     }
     cargarProductos();
+    $("#enviar-mensaje").click(function(){
+        $.ajax({
+            url: URLbase + "/autentificar", type: "POST", data: {
+                email : $("#email").val(),
+                password : $("#password").val()
+            },
+            dataType: 'json',
+            success: function(respuesta) {
+                console.log(respuesta.token); // <- Prueba
+                token = respuesta.token;
+                $( "#contenedor-principal" ).load( "widget-productos.html");
+            },
+            error : function (error){
+                $("#widget-login" ).prepend("<div class='alert alert-danger'>Usuario no encontrado</div>");
+            }
+        });
+    });
+
+    function enviarMensaje(_id) {
+        idproducto = _id;
+        $( "#contenedor-principal" ).load( "widget-mensajes.html");
+    }
 </script>
