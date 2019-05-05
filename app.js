@@ -103,6 +103,8 @@ app.use('/api/conversacion', routerUsuarioToken);
 app.use('/api/misconversaciones', routerUsuarioToken);
 app.use('/api/leido', routerUsuarioToken);
 app.use('/api/eliminar', routerUsuarioToken);
+app.use('/api/idconversacion', routerUsuarioToken);
+
 
 //routerUsuarioVendedor
 var routerUsuarioVendedor = express.Router();
