@@ -5,7 +5,7 @@
         <thead>
         <tr>
             <th>Producto</th>
-            <th>Usuario</th>
+            <th>Usuario/Vendedor</th>
             <th>Ver Chat</th>
             <th class="col-md-1"></th>
         </tr>
@@ -41,29 +41,63 @@
         });
     }
 
+    //TODO la tabla de conversaciones muestra mas cosas de las que deberia
     function montarTabla(productos){
         for (var i = 0; i < productos.length; i++) {
             $.ajax({
+                ajaxI:i,
+                ajaxPro:productos,
                 url: URLbase + "/conversacion",
                 type: "GET",
                 data: { },
                 dataType: 'json',
                 headers: { "token": token,"id_oferta":productos[i]._id },
                 success: function(respuesta) {
+                    var l=this.ajaxI
+                    var producta=this.ajaxPro
+                    //TODO no se puede hacer un console.log para ver que mete
+                    //TODO pero la api esta bien
+                    //console.log(respuesta,producta[l]_id,producta[l].nombre);
                     mostrar.push({
                         usuario:respuesta,
-                        oferta:productos[i]._id,
-                        ofertaN:productos[i].nombre
+                        oferta:producta[l]._id,
+                        ofertaN:producta[l].nombre
                     });
+                    console.log(mostrar)
+                    if(producta.length==l+1){
+                        $.ajax({
+                            url: URLbase + "/misconversaciones",
+                            type: "GET",
+                            data: { },
+                            dataType: 'json',
+                            headers: { "token": token},
+                            success: function(respuesta2) {
+                                for (var k = 0; k < respuesta2.length; k++) {
+                                    //TODO no se puede hacer un console.log para ver que mete
+                                    //TODO pero la api esta bien
+                                    //console.log(respuesta2[k].vendedor,respuesta2[k]._id,respuesta2[k].nombre);
+                                    mostrar.push({
+                                        usuario: respuesta2[k].vendedor,
+                                        oferta: respuesta2[k]._id,
+                                        ofertaN: respuesta2[k].nombre
+                                    })
+                                    console.log(mostrar)
+                                    if(k+1==respuesta2.length){
+                                        actualizarTabla(mostrar);
+                                    }
+                                }
+                            },
+                            error : function (error){
+                                $( "#contenedor-principal" ).load("widget-login.html");
+                            }
+                        });
+                    }
                 },
                 error : function (error){
                     $( "#contenedor-principal" ).load("widget-login.html");
                 }
             });
         }
-        //TODO mostrar esta vacio
-        console.log(mostrar)
-        actualizarTabla();
     }
 
     function actualizarTabla(mensajes){

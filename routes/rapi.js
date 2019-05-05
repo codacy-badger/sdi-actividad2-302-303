@@ -59,6 +59,25 @@ module.exports = function (app, gestorBD) {
         });
     });
 
+    app.get("/api/idconversacion", function(req, res) {
+        var IDoferta=req.headers['id_oferta'] || req.body.id_oferta || req.query.id_oferta;
+        var user=req.headers['user'] || req.body.user || req.query.user;
+        var oferta = gestorBD.mongo.ObjectID(IDoferta);
+        var criterio={usuario : user,oferta:oferta}
+        gestorBD.obtenerMensajes( criterio , function(productos) {
+            if (productos == null) {
+                res.status(500);
+                res.json({
+                    error : "se ha producido un error"
+                })
+            } else {
+                res.status(200);
+                res.send( JSON.stringify(productos[0]._id) );
+            }
+        });
+    });
+
+
     app.post("/api/mensaje", function(req, res) {
         var IDoferta=req.headers['id_oferta'] || req.body.id_oferta || req.query.id_oferta;
         var oferta = gestorBD.mongo.ObjectID(IDoferta);
@@ -168,6 +187,7 @@ module.exports = function (app, gestorBD) {
         });
     });
 
+    //Se le pasa el id de una oferta, y devuelve los usuarios que tienen una conversacion con esa oferta
     app.get("/api/conversacion", function(req, res) {
 
         var IDoferta=req.headers['id_oferta'] || req.body.id_oferta || req.query.id_oferta;
@@ -199,6 +219,44 @@ module.exports = function (app, gestorBD) {
                 } else {
                     res.status(500);
                     res.send("Error al ver conversacion");
+                }
+            }
+        });
+    });
+
+    //Se le pasa el email de un usuario, y devuelve las ofertas con las que tiene una conversacion
+    app.get("/api/misconversaciones", function(req, res) {
+
+        var criterio={"usuario":res.usuario}
+        gestorBD.obtenerMensajes(criterio, function (producto) {
+            if (producto == null) {
+                res.status(500);
+                res.json({
+                    error: "se ha producido un error"
+                })
+            } else if (producto[0] ==null){
+                res.status(200);
+                res.send([]);
+            } else {
+                var array = [];
+                var i=0;
+                for (i = 0; i < producto.length; i++) {
+                    console.log(i)
+                    var cirterio={_id:producto[i].oferta}
+                    gestorBD.obtenerProductos(cirterio, function (producto2) {
+                        if (producto == null) {
+                            res.status(500);
+                            res.json({
+                                error: "se ha producido un error"
+                            })
+                        } else {
+                            array.push(producto2)
+                            if(i==producto.length){
+                                res.status(200);
+                                res.send(array);
+                            }
+                        }
+                    });
                 }
             }
         });

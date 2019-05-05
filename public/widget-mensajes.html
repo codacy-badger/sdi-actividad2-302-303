@@ -9,6 +9,8 @@
         </div>
         <div class="col-sm-offset-2 col-sm-10"> <button type="button" id="boton-enviar">Enviar</button>
         </div>
+        <div class="col-sm-offset-2 col-sm-10"> <button type="button" id="boton-eliminar">Eliminar</button>
+        </div>
         <tr>
             <th>Autor</th>
             <th>Mensaje</th>
@@ -23,7 +25,6 @@
 
 
 <script>
-    
     setInterval("cargarMensajes()",5000);
     
     $("#boton-enviar").click(function(){
@@ -43,11 +44,49 @@
                 actualizarTabla();
             },
             error : function (error){
-                //TODO los mensajes se envian pero da error, asi que redirije a la misma pagina como solucion temporal
-                $( "#contenedor-principal" ).load("widget-mensajes.html");
+                actualizarTabla();
             }
         });
     });
+
+    $("#boton-eliminar").click(function(){
+        $.ajax({
+            url: URLbase + "/idconversacion",
+            type: "GET",
+            data: {
+            },
+            dataType: 'json',
+            headers: {
+                "token": token,
+                "user":usuario,
+                "id_oferta":id_oferta
+            },
+            success: function(respuesta) {
+                $.ajax({
+                    url: URLbase + "/eliminar",
+                    type: "GET",
+                    data: {
+                    },
+                    dataType: 'json',
+                    headers: {
+                        "token": token,
+                        "id_conversacion":respuesta
+                    },
+                    success: function(respuesta) {
+                        $( "#contenedor-principal" ).load("widget-productos.html");
+                    },
+                    error : function (error){
+                        $( "#contenedor-principal" ).load("widget-productos.html");
+                    }
+                });
+            },
+            error : function (error){
+                $( "#contenedor-principal" ).load("widget-login.html");
+            }
+        });
+    });
+
+
     var mensajes;
 
     function cargarMensajes(){
