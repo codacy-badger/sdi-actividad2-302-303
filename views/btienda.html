@@ -24,7 +24,7 @@
     <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
         <div style="width: 200px">
             <a href="/producto/{{ producto._id.toString() }}">
-                <img src="/portadas/{{ producto._id.toString() }}.png" alt="logo" />
+                <img src={{producto.imagen}} alt="logo" />
                 <!-- http://www.socicon.com/generator.php -->
                 <div class="wrap">{{ producto.nombre }}</div>
                 <div class="small">{{ producto.vendedor }}</div>

@@ -189,7 +189,7 @@ module.exports = function (app, gestorBD) {
                             })
                         } else {
                             res.status(200);
-                            var array = []
+                            var array = [];
                             for (var i = 0; i < mensajes.length; i++) {
                                 array.push(mensajes[i].usuario);
                             }

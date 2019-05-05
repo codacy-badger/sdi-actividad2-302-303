@@ -252,6 +252,7 @@ module.exports = function(app, swig, gestorBD, mostrarVista, validator) {
                 descripcion: req.body.descripcion,
                 precio: req.body.precio,
                 vendedor: req.session.usuario,
+                imagen: req.body.imagen,
                 fecha: date.getDay() + "/" + date.getMonth()+1 + "/" + date.getFullYear()
             }
             // Conectarse

@@ -9,7 +9,8 @@
 		<thead>
 			<tr>
 				<th>Nombre</th>
-				<th>Genero</th>
+				<th>Descripcion</th>
+				<th>Precio</th>
 				<th class="col-md-1"></th>
 			</tr>
 		</thead>
@@ -17,11 +18,9 @@
 		{% for producto in productos %}
 			<tr>
 				<td>{{ producto.nombre }}</td>
-				<td>{{ producto.genero }}</td>
+				<td>{{ producto.descripcion }}</td>
+				<td>{{ producto.precio }}</td>
 				<td>
-					 <audio controls>
-					   <source src="/audios/{{ producto._id.toString() }}.mp3" type="audio/mpeg">
-					</audio>  
 			    </td>
 			</tr>
 		{% endfor %}
